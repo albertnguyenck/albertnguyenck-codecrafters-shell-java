@@ -15,7 +15,7 @@ public class Main {
                     case "exit":
                         System.exit(0);
                     default:
-                        System.out.println(String.format("%s: prompt not found", prompt));
+                        System.out.println(String.format("%s: command not found", prompt));
                         break;
                 }
             }
