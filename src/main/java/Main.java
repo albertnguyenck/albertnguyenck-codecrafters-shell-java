@@ -19,18 +19,18 @@ public static void main(String[] args) throws Exception {
 private static void type(String prompt) {
     String cmdToCheck = prompt.split(" ", 2)[1];
     if (SHELL_BUILTINS.contains(cmdToCheck)) {
-        System.out.println(String.format("%s is a shell builtin", cmdToCheck));
+        System.out.printf("%s is a shell builtin\n", cmdToCheck);
     } else {
         String systemPATH = System.getenv("PATH");
         String[] paths = systemPATH != null ? systemPATH.split(File.pathSeparator) : new String[0];
         for (String path : paths) {
             File file = new File(path, cmdToCheck);
             if (file.exists() && file.canExecute()) {
-                System.out.println(String.format("%s is %s", cmdToCheck, file.getAbsolutePath()));
+                System.out.printf("%s is %s\n", cmdToCheck, file.getAbsolutePath());
                 return;
             }
         }
-        System.out.println(String.format("%s not found", cmdToCheck));
+        System.out.printf("%s not found\n", cmdToCheck);
     }
 }
 
@@ -58,5 +58,5 @@ private static void executeExternalCommand(String prompt) throws IOException, In
         }
     }
 
-    System.out.println(String.format("%s: command not found", cmdToCheck));
+    System.out.printf("%s: command not found\n", cmdToCheck);
 }
