@@ -12,7 +12,7 @@ public static void main(String[] args) throws Exception {
                     type(prompt);
                 }
                 case "exit" -> System.exit(0);
-                default -> System.out.println(executeExternalCommand(prompt));
+                default -> executeExternalCommand(prompt);
             }
         }
     }
@@ -36,7 +36,7 @@ private static void type(String prompt) {
     }
 }
 
-private static String executeExternalCommand(String prompt) throws IOException, InterruptedException {
+private static void executeExternalCommand(String prompt) throws IOException, InterruptedException {
     String[] parts = prompt.split(" ");
     String cmdToCheck = parts[0];
     String systemPATH = System.getenv("PATH");
@@ -54,15 +54,8 @@ private static String executeExternalCommand(String prompt) throws IOException, 
                     output.append(line).append("\n");
                 }
             }
-
-            int exitVal = process.waitFor();
-            if (exitVal == 0) {
-                return output.toString();
-            } else {
-                return String.format("Error: Command exited with code %d", exitVal);
-            }
+            process.waitFor();
+            System.out.print(output);
         }
     }
-
-    return String.format("%s: command not found", prompt);
 }
