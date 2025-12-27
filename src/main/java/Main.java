@@ -5,12 +5,17 @@ public class Main {
         try (Scanner scanner = new Scanner(System.in)) {
             while (true) {
                 System.out.print("$ ");
-                String command = scanner.nextLine();
+                String prompt = scanner.nextLine();
+                String options[] = prompt.split(" ");
+                String command = options[0];
                 switch (command) {
+                    case "echo":
+                        System.out.println(prompt.replace("echo ", ""));
+                        break;
                     case "exit":
                         System.exit(0);
                     default:
-                        System.out.println(String.format("%s: command not found", command));
+                        System.out.println(String.format("%s: prompt not found", prompt));
                         break;
                 }
             }
