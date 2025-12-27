@@ -37,16 +37,15 @@ private static void type(String prompt) {
 }
 
 private static String executeExternalCommand(String prompt) throws IOException, InterruptedException {
-    String[] parts = prompt.split(" ", 2);
-    String cmdToCheck = prompt.split(" ", 2)[0];
-    String commandArgs = parts.length > 1 ? prompt.split(" ", 2)[1] : "";
+    String[] parts = prompt.split(" ");
+    String cmdToCheck = parts[0];
     String systemPATH = System.getenv("PATH");
     String[] paths = systemPATH != null ? systemPATH.split(File.pathSeparator) : new String[0];
     for (String path : paths) {
         File file = new File(path, cmdToCheck);
         if (file.exists() && file.canExecute()) {
             ProcessBuilder processBuilder = new ProcessBuilder();
-            processBuilder.command(cmdToCheck, commandArgs);
+            processBuilder.command(parts);
             Process process = processBuilder.start();
             StringBuilder output = new StringBuilder();
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
