@@ -8,9 +8,7 @@ public static void main(String[] args) throws Exception {
             String command = prompt.split(" ")[0];
             switch (command) {
                 case "echo" -> System.out.println(prompt.split(" ", 2)[1]);
-                case "type" -> {
-                    type(prompt);
-                }
+                case "type" -> type(prompt);
                 case "exit" -> System.exit(0);
                 default -> executeExternalCommand(prompt);
             }
@@ -56,6 +54,9 @@ private static void executeExternalCommand(String prompt) throws IOException, In
             }
             process.waitFor();
             System.out.print(output);
+            return;
         }
     }
+
+    System.out.println(String.format("%s not found", cmdToCheck));
 }
