@@ -58,5 +58,5 @@ private static void executeExternalCommand(String prompt) throws IOException, In
         }
     }
 
-    System.out.println(String.format("%s not found", cmdToCheck));
+    System.out.println(String.format("%s command not found", cmdToCheck));
 }
