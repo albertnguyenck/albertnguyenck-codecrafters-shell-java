@@ -9,6 +9,7 @@ public static void main(String[] args) throws Exception {
             switch (command) {
                 case "echo" -> System.out.println(prompt.split(" ", 2)[1]);
                 case "type" -> type(prompt);
+                case "pwd" -> System.out.println(System.getProperty("user.dir"));
                 case "exit" -> System.exit(0);
                 default -> executeExternalCommand(prompt);
             }
