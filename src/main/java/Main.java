@@ -1,3 +1,4 @@
+private static String currentWorkingDictionary = System.getProperty("user.dir");
 private static final Set<String> SHELL_BUILTINS = Set.of("echo", "type", "exit", "pwd");
 
 public static void main(String[] args) throws Exception {
@@ -5,11 +6,28 @@ public static void main(String[] args) throws Exception {
         while (true) {
             System.out.print("$ ");
             String prompt = scanner.nextLine().trim();
+            if (prompt.trim().isEmpty()) {
+                continue;
+            }
+
             String command = prompt.split(" ")[0];
             switch (command) {
                 case "echo" -> System.out.println(prompt.split(" ", 2)[1]);
                 case "type" -> type(prompt);
-                case "pwd" -> System.out.println(System.getProperty("user.dir"));
+                case "pwd" -> System.out.println(currentWorkingDictionary);
+                case "cd" -> {
+                    String[] parts = prompt.split(" ", 2);
+                    if (parts.length < 2) {
+                        System.out.println("cd: missing operand");
+                    } else {
+                        File dir = new File(parts[1]);
+                        if (dir.exists() && dir.isDirectory()) {
+                            currentWorkingDictionary = dir.getAbsolutePath();
+                        } else {
+                            System.out.printf("cd: %s: No such file or directory\n", parts[1]);
+                        }
+                    }
+                }
                 case "exit" -> System.exit(0);
                 default -> executeExternalCommand(prompt);
             }
