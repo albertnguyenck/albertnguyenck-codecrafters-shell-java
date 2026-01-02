@@ -1,4 +1,4 @@
-private static final Set<String> SHELL_BUILTINS = Set.of("echo", "type", "exit");
+private static final Set<String> SHELL_BUILTINS = Set.of("echo", "type", "exit", "pwd");
 
 public static void main(String[] args) throws Exception {
     try (Scanner scanner = new Scanner(System.in)) {
