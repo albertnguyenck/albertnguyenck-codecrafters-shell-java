@@ -21,11 +21,15 @@ void main(String[] args) throws Exception {
                         System.out.println("cd: missing operand");
                     } else {
                         String path = parts[1];
-                        File dir = path.startsWith("/") ? new File(path) : new File(currentWorkingDictionary, path);
-                        if (dir.exists() && dir.isDirectory()) {
-                            currentWorkingDictionary = dir.getCanonicalPath();
+                        if (path.equals("~")) {
+                            currentWorkingDictionary = System.getenv("HOME");
                         } else {
-                            System.out.printf("cd: %s: No such file or directory\n", parts[1]);
+                            File dir = path.startsWith("/") ? new File(path) : new File(currentWorkingDictionary, path);
+                            if (dir.exists() && dir.isDirectory()) {
+                                currentWorkingDictionary = dir.getCanonicalPath();
+                            } else {
+                                System.out.printf("cd: %s: No such file or directory\n", parts[1]);
+                            }
                         }
                     }
                 }
