@@ -1,7 +1,7 @@
 private static String currentWorkingDictionary = System.getProperty("user.dir");
 private static final Set<String> SHELL_BUILTINS = Set.of("echo", "type", "exit", "pwd");
 
-public static void main(String[] args) throws Exception {
+void main(String[] args) throws Exception {
     try (Scanner scanner = new Scanner(System.in)) {
         while (true) {
             System.out.print("$ ");
@@ -20,9 +20,10 @@ public static void main(String[] args) throws Exception {
                     if (parts.length < 2) {
                         System.out.println("cd: missing operand");
                     } else {
-                        File dir = new File(parts[1]);
+                        String path = parts[1];
+                        File dir = path.startsWith("/") ? new File(path) : new File(currentWorkingDictionary, path);
                         if (dir.exists() && dir.isDirectory()) {
-                            currentWorkingDictionary = dir.getAbsolutePath();
+                            currentWorkingDictionary = dir.getCanonicalPath();
                         } else {
                             System.out.printf("cd: %s: No such file or directory\n", parts[1]);
                         }
