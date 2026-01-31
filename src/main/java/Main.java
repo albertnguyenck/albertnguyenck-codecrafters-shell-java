@@ -12,7 +12,7 @@ void main(String[] args) throws Exception {
 
             String command = prompt.split(" ")[0];
             switch (command) {
-                case "echo" -> System.out.println(prompt.split(" ", 2)[1]);
+                case "echo" -> System.out.println(escape(prompt.split(" ", 2)[1]));
                 case "type" -> type(prompt);
                 case "pwd" -> System.out.println(currentWorkingDictionary);
                 case "cd" -> {
@@ -67,6 +67,14 @@ private static void executeExternalCommand(String prompt) throws IOException, In
         File file = new File(path, cmdToCheck);
         if (file.exists() && file.canExecute()) {
             ProcessBuilder processBuilder = new ProcessBuilder();
+            if ("cat".equals(cmdToCheck)) {
+                List<String> argList = escapeToList(prompt.split(" ", 2)[1]);
+                parts = new String[argList.size() + 1];
+                parts[0] = "cat";
+                for (int i = 0; i < argList.size(); i++) {
+                    parts[i + 1] = argList.get(i);
+                }
+            }
             processBuilder.command(parts);
             Process process = processBuilder.start();
             StringBuilder output = new StringBuilder();
@@ -83,4 +91,56 @@ private static void executeExternalCommand(String prompt) throws IOException, In
     }
 
     System.out.printf("%s: command not found\n", cmdToCheck);
+}
+
+private static String escape(String input) {
+    StringJoiner stringJoiner = new StringJoiner(" ");
+    StringBuilder builder = new StringBuilder();
+    boolean isInSingleQuotes = false;
+    for (char c : input.toCharArray()) {
+        if (c == '\'') {
+            isInSingleQuotes = !isInSingleQuotes;
+        } else {
+            if (c == ' ' && !isInSingleQuotes) {
+                if (!builder.isEmpty()) {
+                    stringJoiner.add(builder.toString());
+                    builder.setLength(0);
+                }
+            } else {
+                builder.append(c);
+            }
+        }
+    }
+
+    if (!builder.isEmpty()) {
+        stringJoiner.add(builder.toString());
+    }
+
+    return stringJoiner.toString();
+}
+
+private static List<String> escapeToList(String input) {
+    List<String> stringList = new ArrayList<>();
+    StringBuilder builder = new StringBuilder();
+    boolean isInSingleQuotes = false;
+    for (char c : input.toCharArray()) {
+        if (c == '\'') {
+            isInSingleQuotes = !isInSingleQuotes;
+        } else {
+            if (c == ' ' && !isInSingleQuotes) {
+                if (!builder.isEmpty()) {
+                    stringList.add(builder.toString());
+                    builder.setLength(0);
+                }
+            } else {
+                builder.append(c);
+            }
+        }
+    }
+
+    if (!builder.isEmpty()) {
+        stringList.add(builder.toString());
+    }
+
+    return stringList;
 }
